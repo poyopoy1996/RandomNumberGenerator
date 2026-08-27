@@ -1,54 +1,88 @@
+import streamlit as st
 import numpy as np
 
 
-def generate_random_sample():
-    # Generate a random seed
-    seed = np.random.default_rng().integers(0, 2**32 - 1)
+st.set_page_config(
+    page_title="Random Number Generator",
+    page_icon="🎲",
+    layout="centered"
+)
 
-    # Create a random number generator using the seed
-    rng = np.random.default_rng(seed)
+st.title("🎲 Random Number Generator")
 
-    try:
-        # Get user inputs
-        population_range = int(input("Please input the population range: "))
-        sample_size = int(input("Please input the sample size: "))
+st.write(
+    "Enter the population range and sample size, then click "
+    "**Generate Random Sample**."
+)
 
-        # Validate inputs
-        if population_range <= 0:
-            print("Error: Range must be greater than 0.")
-            return
 
-        if sample_size <= 0:
-            print("Error: Sample size must be greater than 0.")
-            return
+population_range = st.number_input(
+    "Population Range",
+    min_value=1,
+    value=100,
+    step=1
+)
 
-        if sample_size > population_range:
-            print("Error: Sample size cannot be greater than the population range.")
-            return
+sample_size = st.number_input(
+    "Sample Size",
+    min_value=1,
+    value=10,
+    step=1
+)
 
-        # Generate the random sample
+
+if st.button("🎲 Generate Random Sample", type="primary"):
+
+    if sample_size > population_range:
+        st.error(
+            "Sample size cannot be greater than the population range."
+        )
+
+    else:
+        seed = np.random.default_rng().integers(
+            0,
+            2**32 - 1
+        )
+
+        rng = np.random.default_rng(seed)
+
         sample = rng.choice(
-            population_range,
+            np.arange(1, population_range + 1),
             size=sample_size,
             replace=False
         )
 
-        # Sort the results
         sample = np.sort(sample)
 
-        # Display results
-        print("\n" + "=" * 40)
-        print("RANDOM SAMPLE GENERATOR")
-        print("=" * 40)
-        print(f"Seed: {seed}")
-        print(f"Population Range: 1 to {population_range}")
-        print(f"Sample Size: {sample_size}")
-        print(f"Samples: {sample.tolist()}")
-        print("=" * 40)
+        st.success("Random sample generated successfully!")
 
-    except ValueError:
-        print("Error: Please enter valid whole numbers.")
+        st.subheader("Results")
 
+        col1, col2 = st.columns(2)
 
-if __name__ == "__main__":
-    generate_random_sample()
+        with col1:
+            st.metric(
+                "Population Range",
+                f"1 to {population_range}"
+            )
+
+        with col2:
+            st.metric(
+                "Sample Size",
+                sample_size
+            )
+
+        st.subheader("Generated Sample")
+
+        st.code(
+            ", ".join(map(str, sample)),
+            language=None
+        )
+
+        st.subheader("Random Seed")
+
+        st.code(str(seed), language=None)
+
+        st.info(
+            "Save the random seed to reproduce the sample if necessary."
+        )
