@@ -8,7 +8,7 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("🎲 Random Number Generator")
+st.title("🎲 IAD Random Number Generator")
 
 st.write(
     "Enter the population range and sample size, then click "
