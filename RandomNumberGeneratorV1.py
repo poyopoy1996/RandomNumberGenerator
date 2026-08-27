@@ -3,12 +3,12 @@ import numpy as np
 
 
 st.set_page_config(
-    page_title="Random Number Generator",
+    page_title="IAD Random Number Generator",
     page_icon="🎲",
     layout="centered"
 )
 
-st.title("🎲 Random Number Generator")
+st.title("🎲 IAD Random Number Generator")
 
 st.write(
     "Enter the population range and sample size. "
