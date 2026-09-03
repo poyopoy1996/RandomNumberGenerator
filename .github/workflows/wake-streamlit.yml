@@ -1,0 +1,17 @@
+name: Wake Streamlit App
+
+on:
+  schedule:
+    - cron: "15 */6 * * *"
+  workflow_dispatch:
+
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wake Streamlit app
+        run: |
+          curl -L --max-time 60 -s -o /dev/null \
+          -w "HTTP status: %{http_code}\n" \
+          https://randomnumbergeneratorv1py-c5wqnompzh5wbmuucbsy7t.streamlit.app/
